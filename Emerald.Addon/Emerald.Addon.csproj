@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
+            Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{F3C07B7A-58EA-47A5-9FE4-D548A9F07C4F}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>Emerald.Addon</RootNamespace>
+        <AssemblyName>Emerald.Addon</AssemblyName>
+        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="Assembly-CSharp">
+          <HintPath>..\..\..\Library\Application Support\Steam\steamapps\common\Kerbal Space Program\KSP.app\Contents\Resources\Data\Managed\Assembly-CSharp.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Assembly-CSharp-firstpass">
+          <HintPath>..\..\..\Library\Application Support\Steam\steamapps\common\Kerbal Space Program\KSP.app\Contents\Resources\Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Xml"/>
+        <Reference Include="UnityEngine">
+          <HintPath>..\..\..\Library\Application Support\Steam\steamapps\common\Kerbal Space Program\KSP.app\Contents\Resources\Data\Managed\UnityEngine.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+          <HintPath>..\..\..\Library\Application Support\Steam\steamapps\common\Kerbal Space Program\KSP.app\Contents\Resources\Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.InputLegacyModule">
+          <HintPath>..\..\..\Library\Application Support\Steam\steamapps\common\Kerbal Space Program\KSP.app\Contents\Resources\Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Flight.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Emerald.Commands\Emerald.Commands.csproj">
+        <Project>{54b388ba-759a-45a6-bbd7-f7ff7bd53782}</Project>
+        <Name>Emerald.Commands</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Emerald.Runtime\Emerald.Runtime.csproj">
+        <Project>{c85c9fe7-99a4-495b-a6bd-d7e7ebf45307}</Project>
+        <Name>Emerald.Runtime</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+
+    <!-- Deploy the mod and ONLY its third-party dependencies to KSP's GameData.
+         Stock KSP/Unity assemblies are excluded via <Private>False</Private> on their references,
+         so they never reach $(OutputPath) and can't leak into GameData.
+         netstandard.dll is a framework facade that a net472 build does not emit, so it is
+         vendored in lib/ and copied explicitly. -->
+    <Target Name="DeployToGameData" AfterTargets="Build">
+        <PropertyGroup>
+            <KspDir>$(HOME)/Library/Application Support/Steam/steamapps/common/Kerbal Space Program</KspDir>
+            <EmeraldDir>$(KspDir)/GameData/Emerald</EmeraldDir>
+            <!-- KSP's (Unity) Mono resolves the libmruby DllImport via its embed-runtime
+                 fallback path; the Player.log shows it probing exactly this directory:
+                 ".../KSP.app/Contents/Frameworks/MonoEmbedRuntime/osx/libmruby{,.dylib,.so,.bundle}".
+                 The native lib is x86_64 (KSP runs x86_64), self-contained (only libSystem),
+                 and is NOT under any signed resource set, so dropping it here is safe. -->
+            <NativeDir>$(KspDir)/KSP.app/Contents/Frameworks/MonoEmbedRuntime/osx</NativeDir>
+        </PropertyGroup>
+        <ItemGroup>
+            <Deploy Include="$(OutputPath)Emerald.*.dll" />
+            <Deploy Include="$(OutputPath)ChibiRuby*.dll" />
+            <Deploy Include="$(OutputPath)System.*.dll" />
+            <Deploy Include="$(OutputPath)Microsoft.Bcl.*.dll" />
+            <Deploy Include="$(OutputPath)Utf8StringInterpolation.dll" />
+            <!-- Framework facades a net472 build does not propagate to this project's output.
+                 All are vendored in lib/ and copied explicitly:
+                 - netstandard.dll is never emitted.
+                 - System.Runtime.CompilerServices.Unsafe.dll is resolved as a framework
+                   assembly across the ProjectReference and dropped.
+                 - System.ValueTuple.dll: ChibiRuby (netstandard2.0) references System.ValueTuple,
+                   and the net461 netstandard.dll shim type-forwards it to a standalone
+                   System.ValueTuple assembly. net472 keeps ValueTuple in mscorlib, so the build
+                   never emits this DLL — without it KSP's Mono throws ReflectionTypeLoadException
+                   ("Could not resolve type ... System.ValueTuple`n, netstandard, 2.0.0.0") and
+                   ChibiRuby fails to load entirely. This is the matching companion to the
+                   net461 netstandard.dll already vendored here. -->
+            <Deploy Include="$(MSBuildThisFileDirectory)lib/netstandard.dll" />
+            <Deploy Include="$(MSBuildThisFileDirectory)lib/System.Runtime.CompilerServices.Unsafe.dll" />
+            <Deploy Include="$(MSBuildThisFileDirectory)lib/System.ValueTuple.dll" />
+            <!-- Native MRuby compiler library (libmruby). Deployed to the embed-runtime path
+                 (see NativeDir above), NOT GameData, because that is where Mono looks for it. -->
+            <DeployNative Include="$(MSBuildThisFileDirectory)lib/libmruby.dylib" />
+        </ItemGroup>
+        <MakeDir Directories="$(EmeraldDir)" />
+        <Copy SourceFiles="@(Deploy)" DestinationFolder="$(EmeraldDir)" SkipUnchangedFiles="true" />
+        <MakeDir Directories="$(NativeDir)" />
+        <Copy SourceFiles="@(DeployNative)" DestinationFolder="$(NativeDir)" SkipUnchangedFiles="true" />
+        <Message Importance="high" Text="Emerald: deployed to $(EmeraldDir) -> @(Deploy)" />
+        <Message Importance="high" Text="Emerald: deployed native lib to $(NativeDir) -> @(DeployNative)" />
+    </Target>
+
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>
