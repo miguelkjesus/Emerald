@@ -1,14 +1,19 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Emerald.Runtime;
+
+// Mark this assembly so the Emerald host discovers and registers the commands,
+// services and formatters it contains.
+[assembly: EmeraldExtension]
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Emerald.Runtime.Services")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Emerald.Builtins")]
+[assembly: AssemblyDescription("Built-in Emerald commands, services and formatters.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Emerald.Runtime.Services")]
+[assembly: AssemblyProduct("Emerald.Builtins")]
 [assembly: AssemblyCopyright("Copyright ©  2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,17 +24,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("892243A0-A0BA-45A3-9580-3DEEF7428AF6")]
+[assembly: Guid("9DBCA0C9-0178-4472-91CD-660479677876")]
 
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

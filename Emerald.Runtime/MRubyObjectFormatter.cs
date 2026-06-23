@@ -23,14 +23,14 @@ namespace Emerald.Runtime
         protected abstract string ClassName { get; }
 
         /// <summary>Maps <paramref name="value"/> to a field → mruby value map, passed as keyword arguments.</summary>
-        protected abstract IReadOnlyDictionary<string, MRubyValue> ToFields(T value, MRubyState mrb);
+        protected abstract IReadOnlyDictionary<string, MRubyValue> ToConstructorKargs(T value, MRubyState mrb);
 
         /// <summary>Rebuilds a <typeparamref name="T"/>, reading fields off the object via <paramref name="fields"/>.</summary>
-        protected abstract T FromFields(MRubyState mrb, MRubyValue value);
+        protected abstract T FromMRubyValue(MRubyState mrb, MRubyValue value);
 
         public MRubyValue Serialize(T value, MRubyState mrb, MRubyValueSerializerOptions options)
         {
-            var fields = ToFields(value, mrb);
+            var fields = ToConstructorKargs(value, mrb);
 
             // `ClassName.new(field0: ..., field1: ...)` — real keyword arguments via Send's kargs overload.
             var kwargs = new KeyValuePair<Symbol, MRubyValue>[fields.Count];
@@ -44,7 +44,7 @@ namespace Emerald.Runtime
         public T Deserialize(MRubyValue value, MRubyState mrb, MRubyValueSerializerOptions options)
         {
             MRubySerializationException.ThrowIfTypeMismatch(value, MRubyVType.Object, ClassName, mrb);
-            return FromFields(mrb, value);
+            return FromMRubyValue(mrb, value);
         }
 
         // The Ruby class is defined elsewhere (the prelude); look it up once and fail clearly if absent.

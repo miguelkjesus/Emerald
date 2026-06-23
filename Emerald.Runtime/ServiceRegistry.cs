@@ -12,6 +12,8 @@ namespace Emerald.Runtime
     public sealed class ServiceRegistry : IDisposable
     {
         private readonly Dictionary<Type, object> _services = new Dictionary<Type, object>();
+        
+        public IEnumerable<object> Services => _services.Values;
 
         /// <summary>Discovers and constructs every [CommandService] across the given assemblies.</summary>
         public static ServiceRegistry FromAssemblies(params Assembly[] assemblies)

@@ -51,11 +51,11 @@ namespace Emerald.Addon
 
         private static ScriptHost CreateProgram()
         {
-            // Discover formatters, commands and services across every loaded Emerald.Runtime.*
-            // assembly. KSP loads all GameData DLLs at startup, so they are already in the AppDomain —
-            // any new Emerald.Runtime.* assembly is picked up automatically, no list to maintain here.
+            // Discover formatters, commands and services across every loaded assembly marked with
+            // [assembly: EmeraldExtension]. KSP loads all GameData DLLs at startup, so they are already
+            // in the AppDomain — any new extension assembly is picked up automatically, no list here.
             var assemblies = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(a => a.GetName().Name.StartsWith("Emerald.Runtime", StringComparison.Ordinal))
+                .Where(a => a.IsDefined(typeof(EmeraldExtensionAttribute), false))
                 .ToArray();
 
             var commands = CommandRegistry.FromAssemblies(assemblies);

@@ -20,7 +20,7 @@ namespace Emerald.Runtime
             // is just a string compare instead of a per-call case conversion.
             _keywords = new string[_parameters.Length];
             for (var i = 0; i < _parameters.Length; i++)
-                _keywords[i] = ToSnakeCase(_parameters[i].Name);
+                _keywords[i] = _parameters[i].Name.ToSnakeCase();
         }
 
         public readonly string Slug;
@@ -51,8 +51,6 @@ namespace Emerald.Runtime
 
         private object[] BindArguments(MRubyState s, ReadOnlySpan<KeyValuePair<Symbol, MRubyValue>> arguments)
         {
-            // Symbol is a record struct, so Symbol.ToString() yields "Symbol { Value = N }", not the
-            // keyword name. Resolve each supplied keyword's real name once (NameOf allocates an RString).
             var keys = new string[arguments.Length];
             for (var i = 0; i < arguments.Length; i++)
                 keys[i] = s.NameOf(arguments[i].Key).ToString();
@@ -94,7 +92,7 @@ namespace Emerald.Runtime
             catch (OverflowException)
             {
                 MRubyError.Raise(s, "argument out of range: " + keyword);
-                return null; // unreachable: Raise throws.
+                return null;
             }
         }
 
@@ -107,7 +105,7 @@ namespace Emerald.Runtime
             catch (TargetInvocationException ex)
             {
                 MRubyError.Raise(s, (ex.InnerException ?? ex).Message);
-                return null; // unreachable: Raise throws.
+                return null;
             }
         }
 
@@ -118,17 +116,6 @@ namespace Emerald.Runtime
                     return i;
 
             return -1;
-        }
-
-        private static string ToSnakeCase(string name)
-        {
-            var sb = new StringBuilder(name.Length + 4);
-            foreach (var c in name)
-            {
-                if (char.IsUpper(c)) { sb.Append('_'); sb.Append(char.ToLowerInvariant(c)); }
-                else sb.Append(c);
-            }
-            return sb.ToString();
         }
     }
 }

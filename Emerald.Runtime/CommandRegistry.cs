@@ -55,8 +55,10 @@ namespace Emerald.Runtime
             {
                 var attribute = method.GetCustomAttribute<CommandAttribute>();
                 if (attribute == null) continue;
+                
+                var slug = attribute.Slug ?? method.Name.ToSnakeCase();
 
-                _commands.Add(attribute.Slug, new Command(attribute.Slug, factory, method, marshaller));
+                _commands.Add(slug, new Command(slug, factory, method, marshaller));
             }
         }
 

@@ -1,4 +1,6 @@
-namespace Emerald.Runtime.Commands
+using Emerald.Runtime;
+
+namespace Emerald.Builtins.Commands
 {
     public sealed class VesselTelemetry : CommandController
     {
@@ -6,16 +8,16 @@ namespace Emerald.Runtime.Commands
         
         private static Vessel GetVessel(int id) => FlightGlobals.Vessels[id];
 
-        [Command("active_vessel_index")]
+        [Command]
         private int ActiveVesselIndex() => FlightGlobals.Vessels.IndexOf(ActiveVessel);
         
-        [Command("vessel_altitude")]
+        [Command]
         private double GetAltitude(int vesselIndex) => GetVessel(vesselIndex).altitude;
         
-        [Command("vessel_surface_velocity")]
+        [Command]
         private Vector3d SurfaceVelocity(int vesselIndex) => GetVessel(vesselIndex).srf_velocity;
         
-        [Command("vessel_vertical_speed")]
+        [Command]
         private double VerticalSpeed(int vesselIndex) => GetVessel(vesselIndex).verticalSpeed;
     }
 }

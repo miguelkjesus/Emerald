@@ -1,6 +1,6 @@
 using Emerald.Runtime;
 
-namespace Emerald.Runtime.Commands
+namespace Emerald.Builtins.Commands
 {
     public sealed class Debug : CommandController
     {
