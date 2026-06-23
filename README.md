@@ -26,22 +26,22 @@ The addon compiles a single Ruby entrypoint (currently hardcoded to
 as a fiber every `FixedUpdate`. Press **`` ` `` (backquote)** in flight to recompile and
 reload; a compile error leaves the previous program running.
 
-Scripts reach C# commands through a single bound entrypoint:
+Each command is exposed as a method on the `Emerald.Commands` module, called with keyword arguments:
 
 ```ruby
-Internal.call :command_slug, keyword: value, other: value
+Emerald.Commands.command_slug(keyword: value, other: value)
 ```
 
-All command arguments are **keyword arguments**. In practice you wrap the raw calls in
-friendly Ruby methods (a prelude), e.g.:
+All command arguments are **keyword arguments**. Calling an undefined command raises a normal
+Ruby `NoMethodError`. In practice you wrap the raw calls in friendly Ruby methods (a prelude), e.g.:
 
 ```ruby
 def altitude(vessel = 0)
-  Internal.call :vessel_altitude, vessel_index: vessel
+  Emerald.Commands.vessel_altitude(vessel_index: vessel)
 end
 
 def set_throttle(value)
-  Internal.call :set_throttle, throttle: value
+  Emerald.Commands.set_throttle(throttle: value)
 end
 ```
 
@@ -86,8 +86,10 @@ public sealed class VesselTelemetry : CommandController
 }
 ```
 
+- **The slug is the method name** on `Emerald.Commands`, so it must be a valid Ruby method name and must
+  not shadow a module built-in (e.g. `class`, `name`, `send`). Duplicate slugs are rejected at startup.
 - **Arguments bind by keyword.** Each parameter's Ruby keyword is the **snake_case** of its
-  name (`vesselIndex` → `vessel_index`). Call it as `Internal.call :vessel_altitude, vessel_index: 0`.
+  name (`vesselIndex` → `vessel_index`). Call it as `Emerald.Commands.vessel_altitude(vessel_index: 0)`.
 - **Defaults are honored.** A C# default value makes the keyword optional; a missing required
   keyword raises a Ruby error, as does an unknown keyword.
 - **Return values are marshalled back to Ruby** (`void`/`null` → `nil`). Custom types need a

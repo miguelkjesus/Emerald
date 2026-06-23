@@ -37,7 +37,7 @@ namespace Emerald.Runtime
         public readonly string EntrypointPath;
         public readonly CommandRegistry Commands;
         public readonly ServiceRegistry Services;
-        public ScriptState State { get; private set; } = ScriptState.NotStarted;
+        public ScriptState State { get; private set; }
 
         private readonly MRubyState _mrb;
         private readonly MRubyCompiler _compiler;
@@ -60,20 +60,18 @@ namespace Emerald.Runtime
 
         private void DefineBindings()
         {
-            _mrb.DefineModule(_mrb.Intern("Internal"), _mrb.ObjectClass, c =>
-            {
-                // Internal.call(command_id, **kwargs)
-                c.DefineClassMethod(_mrb.Intern("call"), (s, _) =>
-                {
-                    s.EnsureArgumentCount(1, 1);
-                    var id = s.NameOf(s.GetArgumentAsSymbolAt(0)).ToString();
+            _mrb.DefineModule(_mrb.Intern("Emerald"), DefineCommands);
+        }
 
-                    if (Commands.TryGetCommand(id, out var command))
-                        return command.Invoke(s, Services, s.GetKeywordArguments());
-                    
-                    MRubyError.Raise(s, "unknown command: " + id);
-                    return MRubyValue.Nil;
-                });
+        private void DefineCommands(ClassDefineOptions module)
+        {
+            module.DefineModule(_mrb.Intern("Commands"), commands =>
+            {
+                foreach (var command in Commands.Commands)
+                {
+                    module.DefineClassMethod(_mrb.Intern(command.Slug),
+                        (state, _) => command.Invoke(state, Services, state.GetKeywordArguments()));
+                }
             });
         }
     }
