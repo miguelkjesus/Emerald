@@ -1,7 +1,8 @@
 using System;
+using Emerald.Runtime.Commands;
 using UnityEngine.Scripting;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Interop
 {
     /// <summary>
     /// Marks a class as an mruby value formatter: an <c>IMRubyValueFormatter&lt;T&gt;</c>

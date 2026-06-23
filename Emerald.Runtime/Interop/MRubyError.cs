@@ -1,7 +1,7 @@
 using System.Text;
 using ChibiRuby;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Interop
 {
     internal static class MRubyError
     {

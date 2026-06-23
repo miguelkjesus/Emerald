@@ -1,6 +1,6 @@
 using System;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Capabilities
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class CapabilityAttribute : Attribute

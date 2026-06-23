@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Extensions
 {
     internal static class StringExtensions
     {

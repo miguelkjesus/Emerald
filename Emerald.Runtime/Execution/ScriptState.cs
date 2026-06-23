@@ -1,4 +1,4 @@
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Execution
 {
     public enum ScriptState
     {

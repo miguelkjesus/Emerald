@@ -1,5 +1,5 @@
 using System;
-using Emerald.Runtime;
+using Emerald.Runtime.Services;
 
 namespace Emerald.Builtins.Services
 {

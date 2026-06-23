@@ -4,8 +4,9 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 using ChibiRuby;
 using ChibiRuby.Serializer;
+using Emerald.Runtime.Extensions;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Interop
 {
     /// <summary>
     /// Bridges CLR values and <see cref="MRubyValue"/> through ChibiRuby's serializer. The resolver

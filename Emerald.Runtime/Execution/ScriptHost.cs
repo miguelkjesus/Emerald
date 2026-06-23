@@ -1,8 +1,10 @@
 using System;
 using ChibiRuby;
 using ChibiRuby.Compiler;
+using Emerald.Runtime.Commands;
+using Emerald.Runtime.Services;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Execution
 {
     /// <summary>
     /// One compiled program bound to one mruby VM for the lifetime of the instance. The constructor

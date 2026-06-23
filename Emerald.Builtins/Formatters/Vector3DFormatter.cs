@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using ChibiRuby;
-using Emerald.Runtime;
+using Emerald.Runtime.Interop;
 
 namespace Emerald.Builtins.Formatters
 {

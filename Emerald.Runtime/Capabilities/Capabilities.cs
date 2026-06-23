@@ -1,6 +1,6 @@
 using System;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Capabilities
 {
     [Flags]
     public enum Capabilities

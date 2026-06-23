@@ -2,7 +2,7 @@ using System;
 using JetBrains.Annotations;
 using UnityEngine.Scripting;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Commands
 {
     [AttributeUsage(AttributeTargets.Method)]
     public sealed class CommandAttribute : PreserveAttribute

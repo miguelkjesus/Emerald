@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using ChibiRuby;
+using Emerald.Runtime.Extensions;
+using Emerald.Runtime.Interop;
+using Emerald.Runtime.Services;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Commands
 {
     public sealed class Command
     {

@@ -4,7 +4,7 @@ using ChibiRuby;
 using ChibiRuby.Serializer;
 using JetBrains.Annotations;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Interop
 {
     /// <summary>
     /// Base class for formatters that marshal a CLR type <typeparamref name="T"/> to and from a Ruby

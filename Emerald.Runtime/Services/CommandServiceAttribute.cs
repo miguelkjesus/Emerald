@@ -1,7 +1,8 @@
 using System;
+using Emerald.Runtime.Commands;
 using UnityEngine.Scripting;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Services
 {
     /// <summary>
     /// Marks a class as a long-lived service: constructed once during <see cref="ServiceRegistry.FromAssemblies"/>,

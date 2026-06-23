@@ -1,7 +1,9 @@
 using System;
 using ChibiRuby;
+using Emerald.Runtime.Interop;
+using Emerald.Runtime.Services;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Commands
 {
     /// <summary>
     /// Base class for command controllers. A fresh instance is created for each command invocation and

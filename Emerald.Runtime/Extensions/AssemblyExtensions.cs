@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Extensions
 {
     internal static class AssemblyExtensions
     {

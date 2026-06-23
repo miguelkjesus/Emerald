@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Emerald.Runtime.Extensions;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Services
 {
     /// <summary>
     /// Discovers and holds the long-lived [CommandService] instances from the scanned assemblies and

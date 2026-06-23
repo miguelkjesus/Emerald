@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Emerald.Runtime.Extensions;
+using Emerald.Runtime.Interop;
 
-namespace Emerald.Runtime
+namespace Emerald.Runtime.Commands
 {
     /// <summary>
     /// Discovers and holds the [Command] methods on <see cref="CommandController"/> subclasses across
