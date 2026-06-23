@@ -5,15 +5,13 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{C85C9FE7-99A4-495B-A6BD-D7E7EBF45307}</ProjectGuid>
+        <ProjectGuid>{54B388BA-759A-45A6-BBD7-F7FF7BD53782}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>Emerald.Runtime</RootNamespace>
-        <AssemblyName>Emerald.Runtime</AssemblyName>
+        <RootNamespace>Emerald.Runtime.Commands</RootNamespace>
+        <AssemblyName>Emerald.Runtime.Commands</AssemblyName>
         <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
-        <!-- Use NuGet PackageReference (not packages.config) for this legacy-format project. -->
-        <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,44 +33,46 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Assembly-CSharp">
+          <HintPath>..\..\..\Library\Application Support\Steam\steamapps\common\Kerbal Space Program\KSP.app\Contents\Resources\Data\Managed\Assembly-CSharp.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Assembly-CSharp-firstpass">
+          <HintPath>..\..\..\Library\Application Support\Steam\steamapps\common\Kerbal Space Program\KSP.app\Contents\Resources\Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
+        <Reference Include="UnityEngine">
+          <HintPath>..\..\..\Library\Application Support\Steam\steamapps\common\Kerbal Space Program\KSP.app\Contents\Resources\Data\Managed\UnityEngine.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
         <Reference Include="UnityEngine.CoreModule">
           <HintPath>..\..\..\Library\Application Support\Steam\steamapps\common\Kerbal Space Program\KSP.app\Contents\Resources\Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+          <Private>False</Private>
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="MiguelJesus.ChibiRuby" Version="1.3.2" />
-        <PackageReference Include="MiguelJesus.ChibiRuby.Compiler" Version="1.3.2" />
-        <PackageReference Include="MiguelJesus.ChibiRuby.Serializer" Version="1.3.2" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="AssemblyExtensions.cs" />
-        <Compile Include="Capabilities.cs" />
-        <Compile Include="CapabilityAttribute.cs" />
-        <Compile Include="Command.cs" />
-        <Compile Include="CommandAttribute.cs" />
-        <Compile Include="CommandController.cs" />
-        <Compile Include="CommandRegistry.cs" />
-        <Compile Include="CommandServiceAttribute.cs" />
-        <Compile Include="MRubyError.cs" />
-        <Compile Include="MRubyFormatterAttribute.cs" />
-        <Compile Include="MRubyMarshaller.cs" />
-        <Compile Include="MRubyObjectFormatter.cs" />
-        <Compile Include="ServiceRegistry.cs" />
-        <Compile Include="ScriptState.cs" />
-        <Compile Include="ScriptHost.cs" />
+        <Compile Include="Debug.cs" />
+        <Compile Include="VesselTelemetry.cs" />
+        <Compile Include="VesselControl.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Emerald.Runtime\Emerald.Runtime.csproj">
+        <Project>{c85c9fe7-99a4-495b-a6bd-d7e7ebf45307}</Project>
+        <Name>Emerald.Runtime</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Emerald.Runtime.Formatters\Emerald.Runtime.Formatters.csproj">
+        <Project>{1c9fdae3-7358-4247-b2e4-5d5de7f4d35b}</Project>
+        <Name>Emerald.Runtime.Formatters</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Emerald.Runtime.Services\Emerald.Runtime.Services.csproj">
+        <Project>{892243a0-a0ba-45a3-9580-3deef7428af6}</Project>
+        <Name>Emerald.Runtime.Services</Name>
+      </ProjectReference>
+    </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
-
 </Project>

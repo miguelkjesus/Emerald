@@ -7,10 +7,7 @@ namespace Emerald.Runtime
     {
         None = 0,
 
-        [Capability("debug.log", true)]
-        DebugLog = 1 << 0,
-
-        [Capability("vessel.telemetry.read", true)]
+        [Capability("vessel.telemetry.read")]
         ReadVesselTelemetry = 1 << 1,
     }
 }

@@ -5,13 +5,11 @@ namespace Emerald.Runtime
     [AttributeUsage(AttributeTargets.Field)]
     public class CapabilityAttribute : Attribute
     {
-        public CapabilityAttribute(string id, bool safe = false)
+        public CapabilityAttribute(string id)
         {
             Id = id;
-            Safe = safe;
         }
 
         public readonly string Id;
-        public readonly bool Safe;
     }
 }

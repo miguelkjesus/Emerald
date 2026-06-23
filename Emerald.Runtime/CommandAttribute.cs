@@ -1,17 +1,16 @@
 using System;
+using UnityEngine.Scripting;
 
 namespace Emerald.Runtime
 {
     [AttributeUsage(AttributeTargets.Method)]
-    public sealed class CommandAttribute : Attribute
+    public sealed class CommandAttribute : PreserveAttribute
     {
-        public CommandAttribute(string id, Capabilities requiredCapabilities = Capabilities.None)
+        public CommandAttribute(string slug)
         {
-            Id = id;
-            RequiredCapabilities = requiredCapabilities;
+            Slug = slug;
         }
 
-        public readonly string Id;
-        public readonly Capabilities RequiredCapabilities;
+        public readonly string Slug;
     }
 }

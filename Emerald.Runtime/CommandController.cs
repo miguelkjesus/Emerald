@@ -1,0 +1,35 @@
+using System;
+using ChibiRuby;
+
+namespace Emerald.Runtime
+{
+    /// <summary>
+    /// Base class for command controllers. A fresh instance is created for each command invocation and
+    /// its per-call data (the mruby state, the resolved services, the command slug) is populated before
+    /// the [Command] method runs — so the controller is its own context. Controllers are transient;
+    /// anything that must persist belongs in a [CommandService]. Requires a public parameterless ctor.
+    /// </summary>
+    public abstract class CommandController
+    {
+        /// <summary>The mruby VM the current command is running in.</summary>
+        public MRubyState State { get; internal set; }
+
+        /// <summary>The slug the current command was invoked as.</summary>
+        public string Slug { get; internal set; }
+
+        internal ServiceRegistry Services { get; set; }
+
+        /// <summary>Resolves a long-lived service registered with the host. Raises if missing.</summary>
+        protected T Service<T>() where T : class
+        {
+            return Services.Resolve<T>()
+                   ?? throw new InvalidOperationException("Service not registered: " + typeof(T).Name);
+        }
+
+        /// <summary>Raises a Ruby StandardError. Does not return (mruby longjmp-style raise).</summary>
+        protected void Raise(string message)
+        {
+            MRubyError.Raise(State, message);
+        }
+    }
+}

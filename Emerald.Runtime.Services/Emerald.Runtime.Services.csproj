@@ -5,11 +5,11 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{54B388BA-759A-45A6-BBD7-F7FF7BD53782}</ProjectGuid>
+        <ProjectGuid>{892243A0-A0BA-45A3-9580-3DEEF7428AF6}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>Emerald.Commands</RootNamespace>
-        <AssemblyName>Emerald.Commands</AssemblyName>
+        <RootNamespace>Emerald.Runtime.Services</RootNamespace>
+        <AssemblyName>Emerald.Runtime.Services</AssemblyName>
         <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>
@@ -55,9 +55,8 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Debug.cs" />
+        <Compile Include="FlyByWireService.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="Vessel\Telemetry.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Emerald.Runtime\Emerald.Runtime.csproj">
@@ -66,12 +65,4 @@
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
-
 </Project>

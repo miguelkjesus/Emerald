@@ -8,46 +8,74 @@ namespace Emerald.Addon
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public sealed class Flight : MonoBehaviour
     {
-        private Program _program;
+        private ScriptHost _program;
 
         private void Start()
         {
+            TryReloadProgram();
+        }
+
+        private void OnDestroy()
+        {
+            _program?.Dispose();
+        }
+
+        private void FixedUpdate()
+        {
+            if (Input.GetKeyDown(KeyCode.BackQuote))
+            {
+                ScreenMessages.PostScreenMessage("[Emerald] Recompiling program... ");
+                TryReloadProgram();
+            }
+
+            TryTickProgram();
+        }
+
+        // ReSharper disable Unity.PerformanceAnalysis
+        private void TryReloadProgram()
+        {
             try
             {
-                var path = ExpandHome("~/work/ksp-script/main.rb");
-
-                _program = new Program(path, Capabilities.DebugLog | Capabilities.ReadVesselTelemetry);
-
-                _program.CommandRegistry.AddFromService(new Commands.Debug());
-                _program.CommandRegistry.AddFromService(new Commands.Vessel.Telemetry());
+                // Build the replacement first; only tear the running program down once the new one
+                // has compiled, so a compile error leaves the current program running.
+                var next = CreateProgram();
+                _program?.Dispose();
+                _program = next;
             }
             catch (Exception e)
             {
-                Debug.LogError("[Emerald] startup failed: " + e);
+                ScreenMessages.PostScreenMessage("[Emerald] Load failed: " + e);
+                Debug.Log("[Emerald] Load failed: " + e);
             }
         }
 
-        private void Update()
+        private static ScriptHost CreateProgram()
         {
-            if (!Input.GetKeyDown(KeyCode.F)) return;
+            // Discover formatters, commands and services across every loaded Emerald.Runtime.*
+            // assembly. KSP loads all GameData DLLs at startup, so they are already in the AppDomain —
+            // any new Emerald.Runtime.* assembly is picked up automatically, no list to maintain here.
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(a => a.GetName().Name.StartsWith("Emerald.Runtime", StringComparison.Ordinal))
+                .ToArray();
 
-            ScreenMessages.PostScreenMessage("Addon: Pressed F");
+            var commands = CommandRegistry.FromAssemblies(assemblies);
+            var services = ServiceRegistry.FromAssemblies(assemblies);
 
-            if (_program == null)
-            {
-                ScreenMessages.PostScreenMessage("Addon: program not loaded.");
-                return;
-            }
+            var path = ExpandHome("~/work/ksp-script/main.rb");
+            return new ScriptHost(path, commands, services);
+        }
 
+        // ReSharper disable Unity.PerformanceAnalysis
+        private void TryTickProgram()
+        {
             try
             {
-                var commandIds = _program.CommandRegistry.Commands.Select(c => c.Id);
-                ScreenMessages.PostScreenMessage(string.Join(", ", commandIds));
-                _program.Execute();
+                _program?.Tick();
             }
             catch (Exception e)
             {
-                Debug.LogError("[Emerald] execute failed: " + e);
+                ScreenMessages.PostScreenMessage("[Emerald] Execution error: " + e);
+                Debug.Log("[Emerald] Execution error: " + e);
             }
         }
 

@@ -63,13 +63,21 @@
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\Emerald.Commands\Emerald.Commands.csproj">
-        <Project>{54b388ba-759a-45a6-bbd7-f7ff7bd53782}</Project>
-        <Name>Emerald.Commands</Name>
-      </ProjectReference>
       <ProjectReference Include="..\Emerald.Runtime\Emerald.Runtime.csproj">
         <Project>{c85c9fe7-99a4-495b-a6bd-d7e7ebf45307}</Project>
         <Name>Emerald.Runtime</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Emerald.Runtime.Commands\Emerald.Runtime.Commands.csproj">
+        <Project>{54b388ba-759a-45a6-bbd7-f7ff7bd53782}</Project>
+        <Name>Emerald.Runtime.Commands</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Emerald.Runtime.Services\Emerald.Runtime.Services.csproj">
+        <Project>{892243a0-a0ba-45a3-9580-3deef7428af6}</Project>
+        <Name>Emerald.Runtime.Services</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Emerald.Runtime.Formatters\Emerald.Runtime.Formatters.csproj">
+        <Project>{1c9fdae3-7358-4247-b2e4-5d5de7f4d35b}</Project>
+        <Name>Emerald.Runtime.Formatters</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
