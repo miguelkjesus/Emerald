@@ -26,10 +26,10 @@ The addon compiles a single Ruby entrypoint (currently hardcoded to
 as a fiber every `FixedUpdate`. Press **`` ` `` (backquote)** in flight to recompile and
 reload; a compile error leaves the previous program running.
 
-Each command is exposed as a method on the `Emerald.Commands` module, called with keyword arguments:
+Each command is exposed as a method on the `Emerald` module, called with keyword arguments:
 
 ```ruby
-Emerald.Commands.command_slug(keyword: value, other: value)
+Emerald.command_slug(keyword: value, other: value)
 ```
 
 All command arguments are **keyword arguments**. Calling an undefined command raises a normal
@@ -37,11 +37,11 @@ Ruby `NoMethodError`. In practice you wrap the raw calls in friendly Ruby method
 
 ```ruby
 def altitude(vessel = 0)
-  Emerald.Commands.vessel_altitude(vessel_index: vessel)
+  Emerald.vessel_altitude(vessel_index: vessel)
 end
 
 def set_throttle(value)
-  Emerald.Commands.set_throttle(throttle: value)
+  Emerald.set_throttle(throttle: value)
 end
 ```
 

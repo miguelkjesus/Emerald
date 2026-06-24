@@ -61,16 +61,11 @@ namespace Emerald.Runtime.Execution
 
         private void DefineBindings()
         {
-            _mrb.DefineModule(_mrb.Intern("Emerald"), DefineCommands);
-        }
-
-        private void DefineCommands(ClassDefineOptions module)
-        {
-            module.DefineModule(_mrb.Intern("Commands"), commands =>
+            _mrb.DefineModule(_mrb.Intern("Emerald"), emerald =>
             {
                 foreach (var command in Commands.Commands)
                 {
-                    module.DefineClassMethod(_mrb.Intern(command.Slug),
+                    emerald.DefineClassMethod(_mrb.Intern(command.Slug),
                         (state, _) => command.Invoke(state, Services, state.GetKeywordArguments()));
                 }
             });
