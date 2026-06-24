@@ -5,12 +5,6 @@ using Emerald.Runtime.Services;
 
 namespace Emerald.Runtime.Commands
 {
-    /// <summary>
-    /// Base class for command controllers. A fresh instance is created for each command invocation and
-    /// its per-call data (the mruby state, the resolved services, the command slug) is populated before
-    /// the [Command] method runs — so the controller is its own context. Controllers are transient;
-    /// anything that must persist belongs in a [CommandService]. Requires a public parameterless ctor.
-    /// </summary>
     public abstract class CommandController
     {
         /// <summary>The mruby VM the current command is running in.</summary>

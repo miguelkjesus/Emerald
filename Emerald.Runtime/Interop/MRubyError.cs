@@ -12,7 +12,7 @@ namespace Emerald.Runtime.Interop
         
         public static void Raise(MRubyState s, string message)
         {
-            s.Raise(s.StandardErrorClass, Encoding.UTF8.GetBytes(message));
+            Raise(s, s.StandardErrorClass, message);
         }
     }
 }

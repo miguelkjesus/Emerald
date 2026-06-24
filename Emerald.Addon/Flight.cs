@@ -39,8 +39,6 @@ namespace Emerald.Addon
         {
             try
             {
-                // Build the replacement first; only tear the running program down once the new one
-                // has compiled, so a compile error leaves the current program running.
                 var next = CreateProgram();
                 _program?.Dispose();
                 _program = next;
@@ -54,9 +52,7 @@ namespace Emerald.Addon
 
         private static ScriptHost CreateProgram()
         {
-            // Discover formatters, commands and services across every loaded assembly marked with
-            // [assembly: EmeraldExtension]. KSP loads all GameData DLLs at startup, so they are already
-            // in the AppDomain — any new extension assembly is picked up automatically, no list here.
+            // Discover command controllers and services from any assembly with [assembly: EmeraldExtension]
             var assemblies = AppDomain.CurrentDomain.GetAssemblies()
                 .Where(a => a.IsDefined(typeof(EmeraldExtensionAttribute), false))
                 .ToArray();
@@ -64,6 +60,11 @@ namespace Emerald.Addon
             var commands = CommandRegistry.FromAssemblies(assemblies);
             var services = ServiceRegistry.FromAssemblies(assemblies);
 
+            // TODO:
+            // - Let user define script location
+            // - Think about script model? e.g. kOS-like where scripts can live on the controller (stored in game data)
+            //   or on "at the KSC" (stored in your file system)
+            // - Placeable controller object in KSP
             var path = ExpandHome("~/work/ksp-script/main.rb");
             return new ScriptHost(path, commands, services);
         }

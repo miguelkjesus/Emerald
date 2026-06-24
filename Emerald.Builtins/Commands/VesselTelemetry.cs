@@ -9,15 +9,15 @@ namespace Emerald.Builtins.Commands
         private static Vessel GetVessel(int id) => FlightGlobals.Vessels[id];
 
         [Command]
-        private int ActiveVesselIndex() => FlightGlobals.Vessels.IndexOf(ActiveVessel);
+        public int ActiveVesselIndex() => FlightGlobals.Vessels.IndexOf(ActiveVessel);
         
         [Command]
-        private double GetAltitude(int vesselIndex) => GetVessel(vesselIndex).altitude;
+        public double GetAltitude(int vesselIndex) => GetVessel(vesselIndex).altitude;
         
         [Command]
-        private Vector3d SurfaceVelocity(int vesselIndex) => GetVessel(vesselIndex).srf_velocity;
+        public Vector3d SurfaceVelocity(int vesselIndex) => GetVessel(vesselIndex).srf_velocity;
         
         [Command]
-        private double VerticalSpeed(int vesselIndex) => GetVessel(vesselIndex).verticalSpeed;
+        public double VerticalSpeed(int vesselIndex) => GetVessel(vesselIndex).verticalSpeed;
     }
 }

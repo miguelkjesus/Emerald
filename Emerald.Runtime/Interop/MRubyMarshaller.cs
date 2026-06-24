@@ -8,18 +8,6 @@ using Emerald.Runtime.Extensions;
 
 namespace Emerald.Runtime.Interop
 {
-    /// <summary>
-    /// Bridges CLR values and <see cref="MRubyValue"/> through ChibiRuby's serializer. The resolver
-    /// is built from the <see cref="MRubyFormatterAttribute"/> formatters discovered in the scanned
-    /// assemblies, layered over <see cref="StandardResolver"/> for primitives and collections — so a
-    /// type with a registered formatter uses it, primitives keep working for free, and a type that
-    /// resolves to no formatter raises a Ruby error (the serializer throws
-    /// <see cref="MRubySerializationException"/>, which we translate below).
-    ///
-    /// The serializer only exposes generic <c>Serialize&lt;T&gt;</c>/<c>Deserialize&lt;T&gt;</c>, so
-    /// we close those generic methods at runtime and cache the result per type. Options and caches are
-    /// instance state rebuilt per program (each reload), so formatters never leak across programs.
-    /// </summary>
     internal sealed class MRubyMarshaller
     {
         private static readonly MethodInfo DeserializeOpen = typeof(MRubyValueSerializer).GetMethod(
@@ -36,11 +24,6 @@ namespace Emerald.Runtime.Interop
             _options = options;
         }
 
-        /// <summary>
-        /// Builds a marshaller whose resolver tries every <see cref="MRubyFormatterAttribute"/>
-        /// formatter in <paramref name="assemblies"/> first, then falls back to
-        /// <see cref="StandardResolver"/>.
-        /// </summary>
         public static MRubyMarshaller FromAssemblies(params Assembly[] assemblies)
         {
             var formatters = DiscoverFormatters(assemblies);
@@ -50,7 +33,6 @@ namespace Emerald.Runtime.Interop
             return new MRubyMarshaller(new MRubyValueSerializerOptions { Resolver = resolver });
         }
 
-        /// <summary>Converts an mruby value into a CLR instance of <paramref name="type"/>.</summary>
         public object Deserialize(MRubyState s, MRubyValue value, Type type)
         {
             var deserialize = CloseGeneric(_deserializeCache, DeserializeOpen, type);
@@ -69,7 +51,6 @@ namespace Emerald.Runtime.Interop
             }
         }
 
-        /// <summary>Converts a CLR value of <paramref name="type"/> into an mruby value.</summary>
         public MRubyValue Serialize(MRubyState s, object value, Type type)
         {
             var serialize = CloseGeneric(_serializeCache, SerializeOpen, type);
@@ -98,7 +79,6 @@ namespace Emerald.Runtime.Interop
             return closed;
         }
 
-        /// <summary>Instantiates every non-abstract [MRubyFormatter] across the given assemblies.</summary>
         private static IReadOnlyList<IMRubyValueFormatter> DiscoverFormatters(Assembly[] assemblies)
         {
             var formatters = new List<IMRubyValueFormatter>();

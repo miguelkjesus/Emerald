@@ -6,17 +6,12 @@ using Emerald.Runtime.Extensions;
 
 namespace Emerald.Runtime.Services
 {
-    /// <summary>
-    /// Discovers and holds the long-lived [CommandService] instances from the scanned assemblies and
-    /// resolves them for command controllers. Disposed with the program, which disposes each service.
-    /// </summary>
     public sealed class ServiceRegistry : IDisposable
     {
         private readonly Dictionary<Type, object> _services = new Dictionary<Type, object>();
         
         public IEnumerable<object> Services => _services.Values;
 
-        /// <summary>Discovers and constructs every [CommandService] across the given assemblies.</summary>
         public static ServiceRegistry FromAssemblies(params Assembly[] assemblies)
         {
             var registry = new ServiceRegistry();
@@ -31,7 +26,6 @@ namespace Emerald.Runtime.Services
             return registry;
         }
 
-        /// <summary>The registered service of type <typeparamref name="T"/>, or null if there is none.</summary>
         public T Resolve<T>() where T : class
         {
             return _services.TryGetValue(typeof(T), out var service) ? (T)service : null;
@@ -40,7 +34,8 @@ namespace Emerald.Runtime.Services
         public void Dispose()
         {
             foreach (var service in _services.Values)
-                (service as IDisposable)?.Dispose();
+                if (service is IDisposable disposable)
+                    disposable.Dispose();
 
             _services.Clear();
         }

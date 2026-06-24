@@ -50,8 +50,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Extensions\AssemblyExtensions.cs" />
-        <Compile Include="Capabilities\Capabilities.cs" />
-        <Compile Include="Capabilities\CapabilityAttribute.cs" />
+        <Compile Include="Permissions\Permissions.cs" />
+        <Compile Include="Permissions\PermissionAttribute.cs" />
         <Compile Include="Commands\Command.cs" />
         <Compile Include="Commands\CommandAttribute.cs" />
         <Compile Include="Commands\CommandController.cs" />

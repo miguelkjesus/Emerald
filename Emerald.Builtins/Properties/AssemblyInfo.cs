@@ -2,8 +2,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Emerald.Runtime;
 
-// Mark this assembly so the Emerald host discovers and registers the commands,
-// services and formatters it contains.
+// Emerald will load commands, services, etc. from any assembly with this attribute.
 [assembly: EmeraldExtension]
 
 // General Information about an assembly is controlled through the following

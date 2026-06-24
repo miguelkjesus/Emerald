@@ -8,20 +8,12 @@ using Emerald.Runtime.Interop;
 
 namespace Emerald.Runtime.Commands
 {
-    /// <summary>
-    /// Discovers and holds the [Command] methods on <see cref="CommandController"/> subclasses across
-    /// the scanned assemblies, keyed by command slug.
-    /// </summary>
     public sealed class CommandRegistry
     {
         private readonly Dictionary<string, Command> _commands = new Dictionary<string, Command>();
 
         public IEnumerable<Command> Commands => _commands.Values;
 
-        /// <summary>
-        /// Discovers every command across <paramref name="assemblies"/>, building the marshaller that
-        /// binds each command's arguments and return value (it also discovers the formatters there).
-        /// </summary>
         public static CommandRegistry FromAssemblies(params Assembly[] assemblies)
         {
             var marshaller = MRubyMarshaller.FromAssemblies(assemblies);

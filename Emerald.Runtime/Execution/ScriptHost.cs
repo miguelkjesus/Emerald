@@ -6,13 +6,6 @@ using Emerald.Runtime.Services;
 
 namespace Emerald.Runtime.Execution
 {
-    /// <summary>
-    /// One compiled program bound to one mruby VM for the lifetime of the instance. The constructor
-    /// compiles the entrypoint and builds the program's fiber up front, throwing
-    /// <see cref="ArgumentException"/> on a compile error rather than yielding a half-built host, so
-    /// an instance is always in a runnable state. To reload, dispose the host and construct a new
-    /// one — that discards the previous program and every bit of script-level state it accumulated.
-    /// </summary>
     public sealed class ScriptHost : IDisposable
     {
         public ScriptHost(string entrypointPath, CommandRegistry commands, ServiceRegistry services)
@@ -33,7 +26,7 @@ namespace Emerald.Runtime.Execution
             }
 
             _mainFiber = _mrb.CreateFiber(_mrb.CreateProc(compilation.ToIrep()));
-            State = ScriptState.Running;
+            State = ScriptState.NotStarted;
         }
 
         public readonly string EntrypointPath;
@@ -54,10 +47,16 @@ namespace Emerald.Runtime.Execution
 
         public void Tick()
         {
-            if (State != ScriptState.Running) return;
+            if (State == ScriptState.NotStarted) State = ScriptState.Running;
 
-            try { _mainFiber.Resume(ReadOnlySpan<MRubyValue>.Empty); }
-            finally { State = _mainFiber.IsAlive ? ScriptState.Running : ScriptState.Ended; }
+            try
+            {
+                _mainFiber.Resume(ReadOnlySpan<MRubyValue>.Empty);
+            }
+            finally
+            {
+                State = _mainFiber.IsAlive ? ScriptState.Running : ScriptState.Ended;
+            }
         }
 
         private void DefineBindings()

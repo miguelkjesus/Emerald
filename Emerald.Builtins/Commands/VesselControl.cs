@@ -9,19 +9,19 @@ namespace Emerald.Builtins.Commands
         private FlyByWireService FlyByWire => Service<FlyByWireService>();
 
         [Command]
-        private void StartFlyByWire() => FlyByWire.Start();
+        public void StartFlyByWire() => FlyByWire.Start();
 
         [Command]
-        private void StopFlyByWire() => FlyByWire.Stop();
+        public void StopFlyByWire() => FlyByWire.Stop();
 
         [Command]
-        private void ResetFlyByWireValues() => FlyByWire.ResetValues();
+        public void ResetFlyByWireValues() => FlyByWire.ResetValues();
         
         [Command]
-        private void SetThrottle(float throttle) => FlyByWire.Throttle = throttle;
+        public void SetThrottle(float throttle) => FlyByWire.Throttle = throttle;
 
         [Command]
-        private void Stage()
+        public void Stage()
         {
             if (StageManager.CanSeparate) StageManager.ActivateNextStage();
         }

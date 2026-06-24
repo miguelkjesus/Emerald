@@ -10,7 +10,7 @@ namespace Emerald.Builtins.Formatters
     {
         protected override string ClassName => "Vector3";
 
-        protected override IReadOnlyDictionary<string, MRubyValue> ToConstructorKargs(Vector3d value, MRubyState mrb)
+        protected override IReadOnlyDictionary<string, MRubyValue> ToConstructorKwargs(Vector3d value, MRubyState mrb)
             => new Dictionary<string, MRubyValue>
             {
                 ["x"] = value.x,
